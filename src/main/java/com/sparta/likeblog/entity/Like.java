@@ -2,7 +2,6 @@ package com.sparta.likeblog.entity;
 
 import jakarta.persistence.*;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 
 @NoArgsConstructor
 @Entity
