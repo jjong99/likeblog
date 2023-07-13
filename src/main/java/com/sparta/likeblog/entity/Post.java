@@ -16,9 +16,12 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 @Table(name = "post")
 public class Post extends TimeStamped {
@@ -33,12 +36,18 @@ public class Post extends TimeStamped {
     @Column(nullable = false)
     private String content;
 
+    @ColumnDefault("0")
+    @Column
+    private Long likeCount;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
     private List<Comment> comments;
+
+
 
     public Post(PostRequestDto requestDto) {
         this.title = requestDto.getTitle();
