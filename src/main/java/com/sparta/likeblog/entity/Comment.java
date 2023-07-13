@@ -12,10 +12,15 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 @Entity
 @Getter
 @Setter
+@DynamicInsert
+@DynamicUpdate
 @NoArgsConstructor
 @Table(name = "comment")
 public class Comment extends TimeStamped {
@@ -26,6 +31,10 @@ public class Comment extends TimeStamped {
 
     @Column(nullable = false)
     private String body;
+
+    @ColumnDefault("0")
+    @Column(name = "like_count", nullable = false)
+    private Integer likeCount;
 
     @ManyToOne
     @JoinColumn(name = "post_id")
