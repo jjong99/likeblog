@@ -1,33 +1,29 @@
 package com.sparta.likeblog.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.sparta.likeblog.dto.PostRequestDto;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 @Entity
 @Getter
 @Setter
+@DynamicInsert
+@DynamicUpdate
 @NoArgsConstructor
 @Table(name = "post")
 public class Post extends TimeStamped {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "post_id")
     private Long id;
 
     @Column(nullable = false)
@@ -37,16 +33,15 @@ public class Post extends TimeStamped {
     private String content;
 
     @ColumnDefault("0")
-    @Column
-    private Long likeCount;
+    @Column(name = "like_count", nullable = false)
+    private Integer likeCount;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
-    private List<Comment> comments;
-
+    @OneToMany(mappedBy = "post", cascade = {CascadeType.PERSIST,CascadeType.REMOVE})
+    private List<Comment> comments = new ArrayList<>();
 
 
     public Post(PostRequestDto requestDto) {
@@ -54,15 +49,8 @@ public class Post extends TimeStamped {
         this.content = requestDto.getContent();
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
+    public void addComment(Comment comment) {
+        this.comments.add(comment);
+        comment.setPost(this);
     }
 }

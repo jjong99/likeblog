@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.concurrent.RejectedExecutionException;
 import java.util.stream.Collectors;
 
+import com.sparta.likeblog.repository.CommentRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class PostService {
     private final PostRepository postRepository;
+    private final CommentRepository commentRepository;
 
     public PostResponseDto createPost(PostRequestDto requestDto, User user) {
         Post post = new Post(requestDto);

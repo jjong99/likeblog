@@ -22,11 +22,12 @@ public class CommentService {
 
     public CommentResponseDto createComment(CommentRequestDto requestDto, User user) {
         Post post = postService.findPost(requestDto.getPostId());
-        Comment comment = new Comment(requestDto.getBody());
+        Comment comment = new Comment(requestDto);
         comment.setUser(user);
         comment.setPost(post);
 
         var savedComment = commentRepository.save(comment);
+        post.addComment(comment);
 
         return new CommentResponseDto(savedComment);
     }
