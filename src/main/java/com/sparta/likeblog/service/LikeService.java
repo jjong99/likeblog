@@ -56,6 +56,7 @@ public class LikeService {
         }
     }
 
+    @Transactional
     public CommentResponseDto commentCancelLike(User user, Long postId, Long commentId) {
         Post post = findPost(postId);
         Comment comment = findComment(commentId);
